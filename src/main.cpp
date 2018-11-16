@@ -29,6 +29,7 @@
 #include "modules/utils/killbutton/KillButton.h"
 #include "modules/utils/PlayLed/PlayLed.h"
 #include "modules/utils/panel/Panel.h"
+#include "modules/utils/queuesize/QueueSize.h"
 #include "libs/Network/uip/Network.h"
 #include "Config.h"
 #include "checksumm.h"
@@ -189,6 +190,10 @@ void init() {
     #ifndef NO_UTILS_MOTORDRIVERCONTROL
     kernel->add_module( new MotorDriverControl(0) );
     #endif
+    #ifndef NO_UTILS_QUEUESIZE
+    kernel->add_module( new(AHB0) QueueSize() );
+    #endif
+
     // Create and initialize USB stuff
     u.init();
 
