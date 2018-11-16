@@ -37,6 +37,9 @@ public:
      */
     bool is_empty(void) const;
     bool is_full(void) const;
+    // number of items in queue
+    unsigned int item_count(void) const;
+    unsigned int item_count_isr(void) const;
 
     /*
      * resize

@@ -150,6 +150,32 @@ bool BlockQueue::is_empty() const
     return r;
 }
 
+
+unsigned int BlockQueue::item_count() const
+{
+    int d = head_i - tail_i;
+    unsigned int count = 0;
+    if(d < 0) {
+       count = length - d;
+    } else {
+       count = d;
+    }
+    return count;
+}
+
+unsigned int BlockQueue::item_count_isr() const
+{
+    int d = head_i - isr_tail_i;
+    unsigned int count = 0;
+    if(d < 0) {
+       count = length - d;
+    } else {
+       count = d;
+    }
+    return count;
+}
+
+
 /*
  * resize
  */

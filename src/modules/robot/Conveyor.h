@@ -36,6 +36,9 @@ public:
     float get_current_feedrate() const { return current_feedrate; }
     void force_queue() { check_queue(true); }
 
+    unsigned int get_queue_item_count() const { return queue.item_count(); }
+    unsigned int get_queue_item_count_isr() const { return queue.item_count_isr(); }
+
     friend class Planner; // for queue
 
 private:
