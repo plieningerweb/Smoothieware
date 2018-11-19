@@ -74,6 +74,7 @@ protected:
         bool halt_flag:1;
         bool query_flag:1;
         bool last_char_was_dollar:1;
+        bool last_char_was_questionmark:1;
         // if we receive a line that's longer than the buffer, to avoid a deadlock
         // we must flush the buffer.
         // then to avoid delivering the tail of a line to Smoothie we must keep

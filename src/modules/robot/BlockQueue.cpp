@@ -151,24 +151,24 @@ bool BlockQueue::is_empty() const
 }
 
 
-unsigned int BlockQueue::item_count() const
+int BlockQueue::item_count() const
 {
-    int d = head_i - tail_i;
-    unsigned int count = 0;
+    int d = static_cast<int>(head_i) - static_cast<int>(tail_i);
+    int count = 0;
     if(d < 0) {
-       count = length - d;
+       count = length + d;
     } else {
        count = d;
     }
     return count;
 }
 
-unsigned int BlockQueue::item_count_isr() const
+int BlockQueue::item_count_isr() const
 {
-    int d = head_i - isr_tail_i;
-    unsigned int count = 0;
+    int d = static_cast<int>(head_i) - static_cast<int>(isr_tail_i);
+    int count = 0;
     if(d < 0) {
-       count = length - d;
+       count = length + d;
     } else {
        count = d;
     }

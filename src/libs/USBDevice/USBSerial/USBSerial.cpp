@@ -24,6 +24,7 @@
 #include "libs/Kernel.h"
 #include "libs/SerialMessage.h"
 #include "StreamOutputPool.h"
+#include "Conveyor.h"
 
 #include "mbed.h"
 
@@ -41,6 +42,7 @@ USBSerial::USBSerial(USB *u): USBCDC(u), rxbuf(256 + 8), txbuf(128 + 8)
     halt_flag = false;
     query_flag = false;
     last_char_was_dollar = false;
+    last_char_was_questionmark = true;
 }
 
 bool USBSerial::ensure_tx_space(int space)
@@ -203,9 +205,20 @@ bool USBSerial::USBEvent_EPOut(uint8_t bEP, uint8_t bEPStatus)
             continue;
         }
 
-        if(c[i] == '?') { // ?
-            query_flag = true;
+	if(last_char_was_questionmark && (c[i] == '\n')) {
+	    // we got a question mark before
+	    // now a new line
+	    // dont send new line to processign instead
+	    // delte new line and let the query flag answer stuff happen
+	    // directly
+	    // contiue wont add character to buffer
             continue;
+	}
+        last_char_was_questionmark = (c[i] == '?');
+        if(last_char_was_questionmark) { // ?
+            query_flag = true;
+	    // dont add to buffer
+	    continue;
         }
 
         if(THEKERNEL->is_grbl_mode() || THEKERNEL->is_feed_hold_enabled()) {
@@ -299,7 +312,16 @@ void USBSerial::on_idle(void *argument)
 
     if(query_flag) {
         query_flag = false;
-        puts(THEKERNEL->get_query_string().c_str());
+        //puts(THEKERNEL->get_query_string().c_str());
+	unsigned int count = THECONVEYOR->get_queue_item_count_isr();
+	std::string str;
+	str.append("queue_size: ");
+	char buf[128];
+	size_t n = snprintf(buf, sizeof(buf), "%d", count);
+        if(n > sizeof(buf)) n = sizeof(buf);
+	str.append(buf, n);
+	str.append("\n");
+        puts(str.c_str());
     }
 
 }
