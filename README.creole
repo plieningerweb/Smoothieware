@@ -1,6 +1,12 @@
-Current build status: {{https://travis-ci.org/Smoothieware/Smoothieware.svg?branch=edge}}
+=This is a fork of the official Smothieware with a new command to report the queue size
 
-==Compile CNC BUILD and UPLOAD FIRMWARE
+We added the command M542 or ? to report the current command queue size of the board.
+
+Why? This allows to interactively move the smoothieboard and update the controls trategy with about 50Hz forma host computer.
+
+For details, check the blog article at: ...
+
+==Compile CNC BUILD and UPLOAD FIRMWARE (how we did it in this fork)
 
 {{{
 # install toolchains
@@ -14,6 +20,9 @@ make CNC=1
 
 # copy firmware to sd card of sommtheboard
 cp LPC1768/main.bin /media/smoothieboard-or-mbed/firmware.bin
+
+# also copied to FirmwareBin/firmware-cnc-latest-queusize.bin
+cp LPC1768/main.bin  FirmwareBin/firmware-cnc-latest-queusize.bin
 }}}
 
 
